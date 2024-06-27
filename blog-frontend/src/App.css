@@ -1,12 +1,50 @@
-/* .navbar {
-  position: fixed;
-  width: 100%;
-  z-index: 10;
-  /* height: 64px;  */
-/* } */
+/* src/App.css */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
 
-/* .homepage {
-  margin-top: 64px; 
-  padding: 16px; 
-} */
+input::placeholder, .ql-editor::before {
+  color: #888;
+}
 
+input:focus, .ql-editor:focus {
+  outline: none;
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+.ql-container.ql-snow {
+  border: none;
+}
+
+.custom-file-input {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  padding: 2px 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.custom-file-input:hover {
+  background-color: #0056b3;
+}
+
+.custom-file-input input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  cursor: pointer;
+}
