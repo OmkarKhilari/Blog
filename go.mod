@@ -1,4 +1,4 @@
-module github.com/OmkarKhilari/blog-backend
+module github.com/OmkarKhilari/Blog/blog-backend
 
 go 1.21.6
 

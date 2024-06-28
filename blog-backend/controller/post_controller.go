@@ -1,12 +1,14 @@
 package controller
 
 import (
-	"database/sql"
-	"encoding/json"
-	"net/http"
-	"strconv"
+    "database/sql"
+    "encoding/json"
+    "net/http"
+    "strconv"
 
-	"github.com/gorilla/mux"
+    "github.com/gorilla/mux"
+    "github.com/OmkarKhilari/Blog/blog-backend/database"
+    "github.com/OmkarKhilari/Blog/blog-backend/model"
 )
 
 func GetPosts(w http.ResponseWriter, r *http.Request) {

@@ -1,42 +1,23 @@
-// src/pages/PostPage.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-const posts = [
-  // Sample posts data here
-  {
-    id: 1,
-    title: "5 extra packages to use with Flutter 3.22 in 2024",
-    date: "May 17",
-    views: 759,
-    comments: 6,
-    image: "/path-to-image1.jpg",
-    author: "Leonidas Kanellopoulos",
-  },
-  {
-    id: 2,
-    title: "Google Doesn't Appreciate Flutter",
-    date: "May 28",
-    views: 482,
-    comments: 17,
-    image: "/path-to-image2.jpg",
-    author: "Andrew Zuo",
-  },
-  {
-    id: 3,
-    title: "Debug your Flutter App like a Pro with these 5 Tips & Tricks!",
-    date: "Feb 1",
-    views: 645,
-    comments: 6,
-    image: "/path-to-image3.jpg",
-    author: "Tomic Riedel",
-  },
-  // Add more posts here
-];
+import axios from '../axiosInstance';
 
 const PostPage = () => {
   const { postId } = useParams();
-  const post = posts.find((p) => p.id === parseInt(postId));
+  const [post, setPost] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(`/posts/${postId}`);
+        setPost(response.data);
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      }
+    };
+
+    fetchPost();
+  }, [postId]);
 
   if (!post) {
     return <div>Post not found</div>;
@@ -51,7 +32,7 @@ const PostPage = () => {
           <span>{post.date}</span> • <span>{post.views} views</span> • <span>{post.comments} comments</span>
         </div>
         <img src={post.image} alt={post.title} className="mb-4 w-full rounded-lg" />
-        <p className="text-gray-700">Detailed content of the post goes here...</p>
+        <p className="text-gray-700">{post.content}</p>
       </div>
     </div>
   );

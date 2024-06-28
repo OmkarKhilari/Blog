@@ -1,39 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const posts = [
-  // Sample posts data here
-  {
-    id: 1,
-    title: "5 extra packages to use with Flutter 3.22 in 2024",
-    date: "May 17",
-    views: 759,
-    comments: 6,
-    image: "/path-to-image1.jpg",
-    author: "Leonidas Kanellopoulos",
-  },
-  {
-    id: 2,
-    title: "Google Doesn't Appreciate Flutter",
-    date: "May 28",
-    views: 482,
-    comments: 17,
-    image: "/path-to-image2.jpg",
-    author: "Andrew Zuo",
-  },
-  {
-    id: 3,
-    title: "Debug your Flutter App like a Pro with these 5 Tips & Tricks!",
-    date: "Feb 1",
-    views: 645,
-    comments: 6,
-    image: "/path-to-image3.jpg",
-    author: "Tomic Riedel",
-  },
-  // Add more posts here
-];
+import axios from '../axiosInstance';
 
 const Homepage = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('/posts');
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       {posts.map((post) => (

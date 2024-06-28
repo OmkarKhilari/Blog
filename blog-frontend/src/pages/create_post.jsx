@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
-import '../App.css'; // Ensure you import the CSS file
+import axios from '../axiosInstance';
+import '../App.css';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -21,14 +22,22 @@ const CreatePost = () => {
     reader.readAsDataURL(file);
   };
 
-  const handlePost = () => {
-    // Logic to post the content
-    console.log('Title:', title);
-    console.log('Content:', content);
-    console.log('Image:', image);
+  const handlePost = async () => {
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('image', image);
 
-    // After posting, navigate to the homepage
-    navigate('/');
+    try {
+      await axios.post('/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Error posting:', error);
+    }
   };
 
   return (
