@@ -73,7 +73,7 @@ const CreatePost = () => {
         )}
         <button
           onClick={handlePost}
-          className="px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200"
+          className="px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-700 transition duration-100"
         >
           Post
         </button>

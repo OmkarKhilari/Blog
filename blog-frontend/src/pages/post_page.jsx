@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosInstance';
 
-const PostPage = () => {
-  const { postId } = useParams();
+const Post = () => {
+  const { id } = useParams();
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`/posts/${postId}`);
+        const response = await axios.get(`/posts/${id}`);
         setPost(response.data);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -17,25 +17,27 @@ const PostPage = () => {
     };
 
     fetchPost();
-  }, [postId]);
+  }, [id]);
 
   if (!post) {
-    return <div>Post not found</div>;
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="mt-16 mb-6 p-4 bg-white">
-        <h2 className="text-2xl font-bold mb-4">{post.title}</h2>
-        <p className="text-gray-600 mb-2">by {post.author}</p>
-        <div className="text-gray-500 mb-4">
-          <span>{post.date}</span> • <span>{post.views} views</span> • <span>{post.comments} comments</span>
-        </div>
-        <img src={post.image} alt={post.title} className="mb-4 w-full rounded-lg" />
-        <p className="text-gray-700">{post.content}</p>
+      <div className="bg-white shadow-sm rounded-lg mb-4 border border-gray-200 p-4">
+        <h1 className="text-3xl font-semibold mb-4">{post.title}</h1>
+        {post.image && (
+          <img 
+            src={`http://localhost:8080/uploads/${post.image}`} 
+            alt={post.title} 
+            style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginBottom: '1rem' }} 
+          />
+        )}
+        <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: post.content }} />
       </div>
     </div>
   );
 };
 
-export default PostPage;
+export default Post;

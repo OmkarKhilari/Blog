@@ -23,6 +23,9 @@ func main() {
     router.HandleFunc("/posts/{id}", controller.UpdatePost).Methods("PUT")
     router.HandleFunc("/posts/{id}", controller.DeletePost).Methods("DELETE")
 
+    // Serve static files from the uploads directory
+    router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
+
     log.Println("Server is running on port 8080")
     log.Fatal(http.ListenAndServe(":8080", router))
 }
