@@ -29,7 +29,7 @@ const Post = () => {
         <h1 className="text-3xl font-semibold mb-4">{post.title}</h1>
         {post.image && (
           <img 
-            src={`http://localhost:8080/uploads/${post.image}`} 
+            src={`http://localhost:8000/uploads/${post.image}`} 
             alt={post.title} 
             style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginBottom: '1rem' }} 
           />

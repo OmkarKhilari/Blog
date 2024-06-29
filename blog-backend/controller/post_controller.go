@@ -27,7 +27,7 @@ func GetPosts(w http.ResponseWriter, r *http.Request) {
 	var posts []model.Post
 	for rows.Next() {
 		var post model.Post
-		err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Author, &post.Date, &post.Views, &post.Comments, &post.Image)
+		err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Author, &post.Date, &post.Image)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -50,7 +50,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var post model.Post
-	err = db.QueryRow("SELECT * FROM posts WHERE id=$1", id).Scan(&post.ID, &post.Title, &post.Content, &post.Author, &post.Date, &post.Views, &post.Comments, &post.Image)
+	err = db.QueryRow("SELECT * FROM posts WHERE id=$1", id).Scan(&post.ID, &post.Title, &post.Content, &post.Author, &post.Date, &post.Image)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			http.Error(w, "Post not found", http.StatusNotFound)
@@ -116,7 +116,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	err = db.QueryRow(
 		"INSERT INTO posts (title, content, author, image) VALUES ($1, $2, $3, $4) RETURNING id, date, views, comments",
 		post.Title, post.Content, post.Author, post.Image,
-	).Scan(&post.ID, &post.Date, &post.Views, &post.Comments)
+	).Scan(&post.ID, &post.Date)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

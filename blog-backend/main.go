@@ -26,6 +26,6 @@ func main() {
     // Serve static files from the uploads directory
     router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads/"))))
 
-    log.Println("Server is running on port 8080")
-    log.Fatal(http.ListenAndServe(":8080", router))
+    log.Println("Server is running on port 8000")
+    log.Fatal(http.ListenAndServe(":8000", router))
 }
