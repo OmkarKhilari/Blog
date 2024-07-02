@@ -48,3 +48,35 @@ input:focus, .ql-editor:focus {
   opacity: 0;
   cursor: pointer;
 }
+
+.post-container {
+  display: flex;
+  align-items: flex-start;
+  max-height: 250px; 
+  overflow: hidden; 
+  cursor: pointer;
+}
+
+.post-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.post-text {
+  flex: 3;
+  margin-right: 20px;
+}
+
+.post-image {
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.post-image img {
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+}
+

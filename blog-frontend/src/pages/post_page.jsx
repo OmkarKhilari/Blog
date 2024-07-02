@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosInstance';
 
-const Post = () => {
-  const { id } = useParams();
+const PostPage = () => {
+  const { postId } = useParams();
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`/posts/${id}`);
+        const response = await axios.get(`/posts/${postId}`);
         setPost(response.data);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -17,7 +17,7 @@ const Post = () => {
     };
 
     fetchPost();
-  }, [id]);
+  }, [postId]);
 
   if (!post) {
     return <div>Loading...</div>;
@@ -25,7 +25,7 @@ const Post = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white shadow-sm rounded-lg mb-4 border border-gray-200 p-4">
+      <div className="mt-12 bg-white shadow-sm rounded-lg border border-gray-200 p-4">
         <h1 className="text-3xl font-semibold mb-4">{post.title}</h1>
         {post.image && (
           <img 
@@ -40,4 +40,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default PostPage;

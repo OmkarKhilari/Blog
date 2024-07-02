@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar.jsx';
@@ -11,16 +10,12 @@ const App = () => {
   return (
     <Router>
       <div>
-        <div className="navbar">
-          <Navbar />
-        </div>
-        <div className="homepage">
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/post/:postId" element={<PostPage />} />
-            <Route path="/create" element={<CreatePost />} />
-          </Routes>
-        </div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/post/:postId" element={<PostPage />} />
+          <Route path="/create" element={<CreatePost />} />
+        </Routes>
       </div>
     </Router>
   );
