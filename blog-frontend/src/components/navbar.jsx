@@ -18,7 +18,7 @@ const Navbar = () => {
             <div className="ml-10 flex items-baseline space-x-4">
               <a href="/" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
               <a href="/create" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Create</a>
-              <a href="/about" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">About</a>
+              <a href="/profile" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
             </div>
           </div>
           <div className="md:hidden">
@@ -38,7 +38,7 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="/" className="text-gray-800 hover:text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
             <a href="/create" className="text-gray-800 hover:text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Create</a>
-            <a href="/about" className="text-gray-800 hover:text-gray-600 block px-3 py-2 rounded-md text-base font-medium">About</a>
+            <a href="/profile" className="text-gray-800 hover:text-gray-600 block px-3 py-2 rounded-md text-base font-medium">Profile</a>
           </div>
         </div>
       )}

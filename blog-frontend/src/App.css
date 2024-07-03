@@ -80,3 +80,42 @@ input:focus, .ql-editor:focus {
   border-radius: 8px;
 }
 
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+footer {
+  background-color: #f9c152; /* Adjust this to match your logo's yellow */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  height: 48px;
+}
+
+.footer-social-icons a {
+  color: white;
+  margin: 0 8px;
+  transition: color 0.3s;
+}
+
+.footer-social-icons a:hover {
+  color: #333;
+}
+
+.footer-text {
+  text-align: center;
+  color: white;
+}
