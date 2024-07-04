@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from '../services/firebase';
+import Loading from '../components/Loading';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,22 +28,41 @@ const ProfilePage = () => {
       const response = await fetch(`/api/blogs?userId=${userId}`);
       const data = await response.json();
       setBlogs(data);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching blogs:', error);
+      setLoading(false);
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
   }
 
   return (
     <div className="container mx-auto p-4 mt-16 max-w-2xl">
-      <div className="flex items-center space-x-4">
-        <img src={user.photoURL} alt={user.displayName} className="w-16 h-16 rounded-full border" />
-        <div>
-          <h2 className="text-2xl font-bold">{user.displayName}</h2>
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex items-center space-x-4">
+          <img src={user.photoURL} alt={user.displayName} className="w-16 h-16 rounded-full border" />
+          <div>
+            <h2 className="text-2xl font-bold">{user.displayName}</h2>
+          </div>
         </div>
+        <button 
+          onClick={handleLogout} 
+          className="px-1 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+        >
+          Logout
+        </button>
       </div>
       <hr className="my-6" />
       <div className="mt-6">

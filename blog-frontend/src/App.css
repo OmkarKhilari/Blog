@@ -92,7 +92,8 @@ body, html {
 }
 
 footer {
-  background-color: #f9c152; /* Adjust this to match your logo's yellow */
+  height: 96px;
+  background-color: #f9c152; 
 }
 
 .footer-content {
@@ -118,4 +119,18 @@ footer {
 .footer-text {
   text-align: center;
   color: white;
+}
+
+.loader {
+  border-top-color: #3498db;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

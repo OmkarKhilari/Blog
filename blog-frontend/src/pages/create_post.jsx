@@ -3,6 +3,9 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosInstance';
+import Loading from '../components/Loading';
+import { useAuth } from '../services/auth';
+import { format } from 'date-fns'; 
 import '../App.css';
 
 const CreatePost = () => {
@@ -10,7 +13,9 @@ const CreatePost = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -23,10 +28,13 @@ const CreatePost = () => {
   };
 
   const handlePost = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
     formData.append('image', image);
+    formData.append('author', user.displayName);
+    formData.append('date', format(new Date(), 'yyyy-MM-dd'));
 
     try {
       await axios.post('/posts', formData, {
@@ -37,8 +45,13 @@ const CreatePost = () => {
       navigate('/');
     } catch (error) {
       console.error('Error posting:', error);
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">

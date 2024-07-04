@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from '../services/firebase';
+import Loading from '../components/Loading';
 
 const LoginPage = () => {
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();   
 
   const handleGoogleLogin = async () => {
+    setLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
       navigate('/create');
       console.log(result.user);
     } catch (error) {
       console.error("Error during login: ", error);
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

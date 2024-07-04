@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosInstance';
+import Loading from '../components/Loading';
 
 const PostPage = () => {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const response = await axios.get(`/posts/${postId}`);
         setPost(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching post:', error);
+        setLoading(false);
       }
     };
 
     fetchPost();
   }, [postId]);
 
-  if (!post) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <Loading />;
   }
 
   return (
