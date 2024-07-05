@@ -6,5 +6,5 @@ type Post struct {
 	Content string `json:"content"`
 	Author  string `json:"author"`
 	Date    string `json:"date"`
-	Image   string `json:"image"`
+	Image   string `json:"image,omitempty"`
 }

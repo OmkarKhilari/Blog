@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/OmkarKhilari/Blog/blog-backend/database"
 	"github.com/OmkarKhilari/Blog/blog-backend/model"
@@ -75,17 +76,22 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleFileUpload(r *http.Request) (string, error) {
-	log.Println("Handling file upload...")
 	file, header, err := r.FormFile("image")
 	if err != nil {
-		log.Println("Error getting file from form:", err)
-		return "", err
+		log.Println("No file uploaded:", err)
+		return "", nil
 	}
 	defer file.Close()
 
-	filename := filepath.Join("uploads", header.Filename)
+	dir := "./uploads"
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		os.Mkdir(dir, os.ModePerm)
+	}
 
-	dst, err := os.Create(filename)
+	fileName := strings.Replace(header.Filename, " ", "_", -1)
+	filePath := filepath.Join(dir, fileName)
+
+	dst, err := os.Create(filePath)
 	if err != nil {
 		log.Println("Error creating file:", err)
 		return "", err
@@ -97,104 +103,42 @@ func handleFileUpload(r *http.Request) (string, error) {
 		return "", err
 	}
 
-	log.Println("File uploaded successfully:", filename)
-	return filename, nil
+	log.Println("File uploaded successfully:", filePath)
+	return fileName, nil
 }
+
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {
 	log.Println("Creating new post...")
 	db := database.GetDB()
 
-	var post model.Post
-	post.Title = r.FormValue("title")
-	post.Content = r.FormValue("content")
-	post.Author = r.FormValue("author")
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	author := r.FormValue("author")
+	date := r.FormValue("date")
 
-	file, _, err := r.FormFile("image")
+	imagePath, err := handleFileUpload(r)
 	if err != nil {
-		log.Println("Invalid file upload:", err)
-		http.Error(w, "Invalid file upload", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer file.Close()
 
-	filename, err := handleFileUpload(r)
-	if err != nil {
-		log.Println("Failed to save file:", err)
-		http.Error(w, "Failed to save file", http.StatusInternalServerError)
-		return
+	var image sql.NullString
+	if imagePath != "" {
+		image = sql.NullString{String: imagePath, Valid: true}
+	} else {
+		image = sql.NullString{String: "", Valid: false}
 	}
-	post.Image = filename
 
-	err = db.QueryRow(
-		"INSERT INTO posts (title, content, author, image) VALUES ($1, $2, $3, $4) RETURNING id, date",
-		post.Title, post.Content, post.Author, post.Image,
-	).Scan(&post.ID, &post.Date)
+	var id int
+	err = db.QueryRow("INSERT INTO posts (title, content, author, date, image) VALUES ($1, $2, $3, $4, $5) RETURNING id", title, content, author, date, image).Scan(&id)
 	if err != nil {
-		log.Println("Error inserting post into database:", err)
+		log.Println("Error inserting post:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(post)
-	log.Println("Post created successfully:", post)
+	json.NewEncoder(w).Encode(map[string]int{"id": id})
+	log.Println("Post created successfully:", id)
 }
-
-func UpdatePost(w http.ResponseWriter, r *http.Request) {
-	log.Println("Updating post...")
-	db := database.GetDB()
-
-	params := mux.Vars(r)
-	id, err := strconv.Atoi(params["id"])
-	if err != nil || id <= 0 {
-		log.Println("Invalid ID:", err)
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
-		return
-	}
-
-	var post model.Post
-	err = json.NewDecoder(r.Body).Decode(&post)
-	if err != nil {
-		log.Println("Invalid request payload:", err)
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
-
-	_, err = db.Exec(
-		"UPDATE posts SET title=$1, content=$2, author=$3, image=$4 WHERE id=$5",
-		post.Title, post.Content, post.Author, post.Image, id,
-	)
-	if err != nil {
-		log.Println("Error updating post:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-	log.Println("Post updated successfully:", post)
-}
-
-func DeletePost(w http.ResponseWriter, r *http.Request) {
-	log.Println("Deleting post...")
-	db := database.GetDB()
-
-	params := mux.Vars(r)
-	id, err := strconv.Atoi(params["id"]) // Define err here
-	if err != nil {
-		log.Println("Invalid ID:", err)
-		http.Error(w, "Invalid ID", http.StatusBadRequest)
-		return
-	}
-
-	_, err = db.Exec("DELETE FROM posts WHERE id=$1", id) // Reuse the err variable
-	if err != nil {
-		log.Println("Error deleting post:", err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-	log.Println("Post deleted successfully:", id)
-}
-

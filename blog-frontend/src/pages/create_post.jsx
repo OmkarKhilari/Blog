@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from '../axiosInstance';
 import Loading from '../components/Loading';
 import { useAuth } from '../services/auth';
-import { format } from 'date-fns'; 
+import { format } from 'date-fns';
 import '../App.css';
 
 const CreatePost = () => {

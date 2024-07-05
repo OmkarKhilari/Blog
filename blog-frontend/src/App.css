@@ -1,6 +1,7 @@
-/* src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
+
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   background-color: #f5f5f5;
   color: #333;
 }
@@ -49,35 +50,53 @@ input:focus, .ql-editor:focus {
   cursor: pointer;
 }
 
+.post-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 .post-container {
-  display: flex;
-  align-items: flex-start;
-  max-height: 250px; 
-  overflow: hidden; 
-  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.post-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .post-content {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
-.post-text {
-  flex: 3;
-  margin-right: 20px;
-}
-
-.post-image {
-  flex: 2;
-  display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .post-image img {
-  max-width: 200px;
+  width: 100%;
   height: auto;
   border-radius: 8px;
+}
+
+.post-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.author {
+  font-weight: 500;
+}
+
+.date {
+  font-size: 0.875rem;
+}
+
+select {
+  appearance: none;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  color: #374151;
 }
 
 body, html {
@@ -92,7 +111,6 @@ body, html {
 }
 
 footer {
-  height: 96px;
   background-color: #f9c152; 
 }
 

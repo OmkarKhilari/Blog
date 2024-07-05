@@ -29,7 +29,7 @@ const PostPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="mt-12 bg-white shadow-sm rounded-lg border border-gray-200 p-4">
+      <div className="mt-12 rounded-lg p-4">
         <h1 className="text-3xl font-semibold mb-4">{post.title}</h1>
         {post.image && (
           <img 
