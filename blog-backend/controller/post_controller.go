@@ -115,6 +115,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 	author := r.FormValue("author")
+	authorID := r.FormValue("author_id")
 	date := r.FormValue("date")
 
 	imagePath, err := handleFileUpload(r)
@@ -131,9 +132,16 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var id int
-	err = db.QueryRow("INSERT INTO posts (title, content, author, date, image) VALUES ($1, $2, $3, $4, $5) RETURNING id", title, content, author, date, image).Scan(&id)
+	err = db.QueryRow("INSERT INTO posts (title, content, author, author_id, date, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", title, content, author, authorID, date, image).Scan(&id)
 	if err != nil {
 		log.Println("Error inserting post:", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	_, err = db.Exec("UPDATE users SET post_ids = array_append(post_ids, $1) WHERE author_id = $2", id, authorID)
+	if err != nil {
+		log.Println("Error updating user's post_ids:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

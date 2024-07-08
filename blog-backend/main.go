@@ -24,6 +24,9 @@ func main() {
 	// router.HandleFunc("/posts/{id}", controller.UpdatePost).Methods("PUT")
 	// router.HandleFunc("/posts/{id}", controller.DeletePost).Methods("DELETE")
 
+	router.HandleFunc("/users", controller.CreateUser).Methods("POST")
+	router.HandleFunc("/users", controller.GetUser).Methods("GET")
+
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
 	origins := handlers.AllowedOrigins([]string{"*"})
