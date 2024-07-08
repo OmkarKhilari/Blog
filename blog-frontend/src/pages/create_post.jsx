@@ -28,6 +28,11 @@ const CreatePost = () => {
   };
 
   const handlePost = async () => {
+    if (!title || !content || !image) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
     setLoading(true);
     const formData = new FormData();
     formData.append('title', title);

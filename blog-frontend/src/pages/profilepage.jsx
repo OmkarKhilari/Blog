@@ -6,7 +6,7 @@ import Loading from '../components/Loading';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
-  const [blogs, setBlogs] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const ProfilePage = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        fetchBlogs(user.uid);
+        fetchProfile(user.uid);
       } else {
         navigate('/login');
       }
@@ -23,14 +23,18 @@ const ProfilePage = () => {
     return () => unsubscribe();
   }, [navigate]);
 
-  const fetchBlogs = async (userId) => {
+  const fetchProfile = async (authorId) => {
     try {
-      const response = await fetch(`/api/blogs?userId=${userId}`);
-      const data = await response.json();
-      setBlogs(data);
+      const response = await fetch(`/api/users?author_id=${authorId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProfile(data);
+      } else {
+        setProfile(null);
+      }
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching blogs:', error);
+      console.error('Error fetching profile:', error);
       setLoading(false);
     }
   };
@@ -67,16 +71,17 @@ const ProfilePage = () => {
       <hr className="my-6" />
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-4">Reading list</h3>
-        {blogs.length === 0 ? (
-          <p className="text-gray-600">No stories</p>
+        {profile && profile.post_ids.length === 0 ? (
+          <p className="text-gray-600">No stories found</p>
         ) : (
           <div className="space-y-4">
-            {blogs.map(blog => (
-              <div key={blog.id} className="p-4 border rounded shadow-sm">
-                <h4 className="text-lg font-semibold mb-2">{blog.title}</h4>
-                <p className="text-gray-700">{blog.content}</p>
+            {profile ? profile.post_ids.map(postId => (
+              <div key={postId} className="p-4 border rounded shadow-sm">
+                <h4 className="text-lg font-semibold mb-2">Post ID: {postId}</h4>
               </div>
-            ))}
+            )) : (
+              <p className="text-gray-600">No profile data found</p>
+            )}
           </div>
         )}
       </div>

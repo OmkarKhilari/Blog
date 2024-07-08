@@ -12,6 +12,22 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const response = await fetch(`/api/users?author_id=${user.uid}`);
+      if (response.status === 404) {
+        await fetch('/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            author_name: user.displayName,
+            author_id: user.uid
+          })
+        });
+      }
+
       navigate('/create');
       console.log(result.user);
     } catch (error) {
