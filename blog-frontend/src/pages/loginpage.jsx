@@ -16,20 +16,23 @@ const LoginPage = () => {
 
       const response = await fetch(`/api/users?author_id=${user.uid}`);
       if (response.status === 404) {
-        await fetch('/api/users', {
+        const createUserResponse = await fetch('/api/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             author_name: user.displayName,
-            author_id: user.uid
+            post_ids: []
           })
         });
+
+        if (!createUserResponse.ok) {
+          throw new Error('User creation failed');
+        }
       }
 
       navigate('/create');
-      console.log(result.user);
     } catch (error) {
       console.error("Error during login: ", error);
       setLoading(false);
