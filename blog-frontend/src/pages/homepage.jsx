@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../axiosInstance';
 import Loading from '../components/Loading';
+import { getImageUrl } from '../services/firebaseStorage';
 import '../App.css';
 
 const Homepage = () => {
@@ -13,7 +14,16 @@ const Homepage = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('/posts');
-        setPosts(response.data);
+        const postsWithImageUrls = await Promise.all(
+          response.data.map(async (post) => {
+            if (post.image) {
+              const imageUrl = await getImageUrl(post.image);
+              return { ...post, imageUrl };
+            }
+            return post;
+          })
+        );
+        setPosts(postsWithImageUrls);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -54,10 +64,10 @@ const Homepage = () => {
           <Link to={`/post/${post.id}`} key={post.id} className="post-link block mb-8">
             <div className="post-container bg-white shadow-sm rounded-lg border border-gray-200 p-4 hover:shadow-lg transition-shadow duration-300">
               <div className="post-content flex flex-col md:flex-row items-start">
-                {post.image && (
+                {post.imageUrl && (
                   <div className="post-image mb-4 md:mb-0 md:mr-4">
                     <img 
-                      src={`http://localhost:8000/${post.image}`} 
+                      src={post.imageUrl} 
                       alt={post.title} 
                       className="rounded-lg object-cover h-48 w-full md:w-64"
                     />

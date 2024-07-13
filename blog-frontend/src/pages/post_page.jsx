@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosInstance';
 import Loading from '../components/Loading';
+import { getImageUrl } from '../services/firebaseStorage';
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -12,7 +13,13 @@ const PostPage = () => {
     const fetchPost = async () => {
       try {
         const response = await axios.get(`/posts/${postId}`);
-        setPost(response.data);
+        const postData = response.data;
+
+        if (postData.image) {
+          postData.imageUrl = await getImageUrl(postData.image);
+        }
+
+        setPost(postData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -31,9 +38,9 @@ const PostPage = () => {
     <div className="max-w-4xl mx-auto p-6">
       <div className="mt-12 rounded-lg p-4">
         <h1 className="text-3xl font-semibold mb-4">{post.title}</h1>
-        {post.image && (
+        {post.imageUrl && (
           <img 
-            src={`http://localhost:8000/uploads/${post.image}`} 
+            src={post.imageUrl} 
             alt={post.title} 
             style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginBottom: '1rem' }} 
           />

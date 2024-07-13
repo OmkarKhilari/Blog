@@ -6,6 +6,8 @@ import axios from '../axiosInstance';
 import Loading from '../components/Loading';
 import { useAuth } from '../services/auth';
 import { format } from 'date-fns';
+import { storage } from '../services/firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import '../App.css';
 
 const CreatePost = () => {
@@ -32,16 +34,39 @@ const CreatePost = () => {
       alert('Please fill in all fields');
       return;
     }
-    
+
     setLoading(true);
+
+    const uploadImageToFirebase = async (file) => {
+      const sanitizedImageName = file.name.replace(/\s+/g, '_');
+      const storageRef = ref(storage, `images/${sanitizedImageName}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          null,
+          (error) => reject(error),
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+    };
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
-    formData.append('image', image);
     formData.append('author', user.displayName);
     formData.append('date', format(new Date(), 'yyyy-MM-dd'));
-
+    formData.append('image', image);
+    
     try {
+      const imageUrl = await uploadImageToFirebase(image);
+      formData.append('imageUrl', imageUrl);
+      
       await axios.post('/posts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
