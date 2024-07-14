@@ -3,6 +3,9 @@
   publish = "blog-frontend/build"
   command = "npm run build"
 
+[context.production.environment]
+  NODE_VERSION = "16.20.0"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
