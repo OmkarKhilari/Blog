@@ -29,7 +29,7 @@ func main() {
 
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
-	origins := handlers.AllowedOrigins([]string{"*"})
+	origins := handlers.AllowedOrigins([]string{"*", "https://blog-shog.vercel.app/"})
 
 	log.Println("Server is running on port 8000")
 	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(headers, methods, origins)(router)))
