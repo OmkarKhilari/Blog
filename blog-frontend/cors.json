@@ -1,6 +1,6 @@
 [
     {
-      "origin": ["http://localhost:3000", "https://blog-shog.vercel.app/"],
+      "origin": ["http://localhost:3000", "https://blog-shog.vercel.app/", "https://blogshog.omkarkhilari.me/"],
       "method": ["GET", "POST", "PUT", "DELETE"],
       "maxAgeSeconds": 3600
     }
