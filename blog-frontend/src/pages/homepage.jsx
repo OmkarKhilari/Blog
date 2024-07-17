@@ -77,7 +77,7 @@ const Homepage = () => {
                   <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>
                   <div className="post-meta mb-2 text-gray-500 text-sm">
                     <span className="author">{post.author}</span>
-                    <span className="date ml-2">{new Date(post.date).toLocaleDateString()}</span>
+                    <span className="date ml-2">{new Date(post.date).toLocaleString()}</span>
                   </div>
                   <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: post.content.slice(0, 100) }} />
                 </div>

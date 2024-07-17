@@ -60,7 +60,7 @@ const CreatePost = () => {
     formData.append('title', title);
     formData.append('content', content);
     formData.append('author', user.displayName);
-    formData.append('date', format(new Date(), 'yyyy-MM-dd'));
+    formData.append('date', format(new Date(), 'yyyy-MM-dd HH:mm:ss'));
     formData.append('image', image);
     
     try {
