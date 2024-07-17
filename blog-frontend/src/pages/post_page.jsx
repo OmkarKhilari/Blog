@@ -42,7 +42,7 @@ const PostPage = () => {
           <img 
             src={post.imageUrl} 
             alt={post.title} 
-            style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginBottom: '1rem' }} 
+            style={{ maxWidth: '100%', height: '324px', borderRadius: '8px', marginBottom: '1rem' }} 
           />
         )}
         <div className="text-gray-700" dangerouslySetInnerHTML={{ __html: post.content }} />
