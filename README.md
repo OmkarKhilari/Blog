@@ -19,4 +19,4 @@ Welcome to BlogShog! This is a blogging platform that integrates ReactJS for the
 
 ## To Test
 
-- **Visit**: [BlogShog](https://blogshog.omkarkhilari.me)
+- **Visit**: [BlogShog](https://blog-shog.vercel.app)
